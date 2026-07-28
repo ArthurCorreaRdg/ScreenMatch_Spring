@@ -1,13 +1,9 @@
+package br.com.alura.screenmatch;
 
-import java.util.Scanner;
-
+import br.com.alura.screenmatch.principal.Principal;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.service.ConversorDados;
-import br.com.alura.screenmatch.service.ObterDados;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -16,18 +12,9 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		SpringApplication.run(ScreenmatchApplication.class, args);
 	}
 
+	@Override
 	public void run(String... args) throws Exception {
-		Scanner leitura = new Scanner(System.in);
-		System.out.println("Digite o nome da série que deseja buscar: ");
-		String serie = leitura.nextLine();
-		
-		ObterDados obter = new ObterDados();
-		String json = obter.obterDados("http://www.omdbapi.com/?i=" + serie + "&apikey=18f8a2a9");
-		System.out.println(json);
-		ConversorDados conversor = new ConversorDados();
-		DadosSerie dadosSerie = conversor.obterDados(json, DadosSerie.class);
-		System.out.println("Título: " + dadosSerie.titulo());
-		System.out.println("Avaliação: " + dadosSerie.avaliacao());
-		System.out.println("Total de temporadas: " + dadosSerie.totalTemporadas());
+		Principal principal = new Principal();
+		principal.exibeMenu();
 	}
 }
