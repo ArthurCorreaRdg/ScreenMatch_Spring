@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.repository;
 
+import br.com.alura.screenmatch.dto.SerieDTO;
 import br.com.alura.screenmatch.model.Categoria;
 import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.model.Serie;
@@ -21,12 +22,22 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     @Query("select s from Serie s Where s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
     List<Serie> serirPorTemporadaEAvaliacao(int totalTemporadas, double avaliacao);
 
-    @Query("SELECT e FROM Serie s JOIN s. epidosidos e WHERE e.titulo ILIKE %:techoEpisodio%")
+    @Query("SELECT e FROM Serie s JOIN s.epidosidos e WHERE e.titulo ILIKE %:trechoEpisodio%")
     List<Episodio> episodiosPorTrecho(int trechoEpisodio);
 
-    @Query("SELECT e FROM Serie s JOIN s. epidosidos e WHERE s = :serie ORDER BY e.avaliacao DESC LIMITE 5")
+    @Query("SELECT e FROM Serie s JOIN s.epidosidos e WHERE s = :serie ORDER BY e.avaliacao DESC LIMITE 5")
     List<Episodio> topEpisodiosPorSerie(Serie serie);
 
-    @Query("SELECT e FROM Serie s JOIN s. epidosidos e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
+    @Query("SELECT e FROM Serie s JOIN s.epidosidos e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
     List<Episodio> episodioPorSerieEAno(Serie serie, int anoLancamento);
+
+    
+    @Query("SELECT s FROM Serie s " +
+                "JOIN s.episodios e " +
+                "GROUP BY s " +
+                "ORDER BY MAX(e.dataLancamento) DESC LIMIT 5")
+    List<Serie> lancamentosMaisRecentes();
+
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s.id = :id AND e.temporada = :numero")
+    List<Episodio> obterEpisodiosPorTemporada(Long id, Long numero);
 }
